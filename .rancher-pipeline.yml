@@ -1,2 +1,22 @@
+stages:
+- name: build
+  steps:
+  - runScriptConfig:
+      image: java:8
+      shellScript: mvn clean package
+- name: 构建和发布镜像
+  steps:
+  - publishImageConfig:
+      dockerfilePath: ./Dockerfile
+      buildContext: .
+      tag: baike:v1
+      registry: 127.0.0.1:34969
+- name: 撒旦打撒
+  steps:
+  - applyAppConfig:
+      catalogTemplate: SD
+      version: v2.2
+      name: myapp
+      targetNamespace: my-namespace
 timeout: 60
 notification: {}
